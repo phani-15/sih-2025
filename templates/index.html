@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Internship Recommender</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        .form-group { margin: 15px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; margin-top: 5px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .recommendation { border: 1px solid #ccc; margin: 10px 0; padding: 15px; border-radius: 5px; }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>🎓 Internship Recommendation System</h1>
+
+    {% if error %}
+        <p class="error">❌ {{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        <div class="form-group">
+            <label>Skill Set (e.g., "python machine learning")</label>
+            <input type="text" name="skills" value="{{ input_data.skills if input_data else '' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Education (e.g., "bachelor computer science")</label>
+            <input type="text" name="education" value="{{ input_data.education if input_data else '' }}">
+        </div>
+
+        <div class="form-group">
+            <label>Mode</label>
+            <select name="mode">
+                <option value="remote" {% if input_data and input_data.mode == 'remote' %}selected{% endif %}>Remote</option>
+                <option value="onsite" {% if input_data and input_data.mode == 'onsite' %}selected{% endif %}>Onsite</option>
+                <option value="hybrid" {% if input_data and input_data.mode == 'hybrid' %}selected{% endif %}>Hybrid</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Location (e.g., "new york")</label>
+            <input type="text" name="location" value="{{ input_data.location if input_data else '' }}">
+        </div>
+
+        <div class="form-group">
+            <label>Sector (e.g., "tech")</label>
+            <input type="text" name="sector" value="{{ input_data.sector if input_data else '' }}">
+        </div>
+
+        <button type="submit">Get Recommendations</button>
+    </form>
+
+    {% if recommendations %}
+        <h2>🎯 Top 5 Recommended Internships</h2>
+        {% for rec in recommendations %}
+            <div class="recommendation">
+                <strong>Company ID:</strong> {{ rec.company_id }}<br>
+                <strong>Match Score:</strong> {{ rec.similarity_score }}<br>
+                <strong>Skills Required:</strong> {{ rec.company_skills }}<br>
+                <strong>Education:</strong> {{ rec.company_education }}<br>
+                <strong>Mode:</strong> {{ rec.company_mode }}<br>
+                <strong>Location:</strong> {{ rec.company_location }}<br>
+                <strong>Sector:</strong> {{ rec.company_sector }}
+            </div>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
