@@ -11,6 +11,7 @@ import pickle
 import os
 from flask import Flask, render_template, request, url_for, jsonify
 
+# --- The Recommender Class from your Canvas ---
 class PMInternshipRecommender:
     def __init__(self, model_dir='trained_model'):
         """
@@ -22,8 +23,8 @@ class PMInternshipRecommender:
         self.training_data = None
         self.evaluation_results = None
         self.model_dir = model_dir
-        self.skill_vectorizer_path = os.path.join(self.model_dir, './skill_vectorizer.pkl')
-        self.education_vectorizer_path = os.path.join(self.model_dir, './education_vectorizer.pkl')
+        self.skill_vectorizer_path = os.path.join(self.model_dir, 'skill_vectorizer.pkl')
+        self.education_vectorizer_path = os.path.join(self.model_dir, 'education_vectorizer.pkl')
         print("🎯 PM Internship Recommendation System Initialized")
 
     def _save_model(self):
@@ -120,7 +121,10 @@ class PMInternshipRecommender:
             internships_df['required_education'] = internships_df['required_education'].fillna('').astype(str).str.lower()
             internships_df['internship_location'] = internships_df['internship_location'].fillna('').astype(str).str.lower()
         except Exception as e:
-            print(f"❌ Error loading internships file: {e}")
+            # --- DEBUGGING: Make the error more visible ---
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print(f"CRITICAL ERROR: Could not read '{internships_file}'. Exception: {e}")
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             return None
 
         recommendations = []
@@ -129,7 +133,6 @@ class PMInternshipRecommender:
                 user_skills, user_education, user_location,
                 internship['required_skills'], internship['required_education'], internship['internship_location'])
             
-            # --- FIX 2: Split skills string into a list for the frontend ---
             skills_list = [s.strip() for s in internship.get('required_skills', '').split(',') if s.strip()]
 
             recommendations.append({
@@ -137,7 +140,7 @@ class PMInternshipRecommender:
                 'company': internship.get('internship_company', 'N/A'),
                 'location': internship.get('internship_location', 'N/A'),
                 'education': internship.get('required_education', 'N/A'),
-                'skills': skills_list, # Use the list here
+                'skills': skills_list,
                 'mode': internship.get('mode', 'In-Person'),
                 'salary': internship.get('salary', 'Competitive'),
                 **result
@@ -173,13 +176,21 @@ def recommend():
         user_education = request.form.get('education', '').lower()
         user_location = request.form.get('location', '').lower()
 
+        # --- DEBUGGING: Print the input received from the form ---
+        print("\n--- NEW REQUEST ---")
+        print(f"Received Skills: {user_skills}")
+        print(f"Received Education: {user_education}")
+        print(f"Received Location: {user_location}")
+        
         if not user_skills and not user_education:
-             # Return a JSON error message with a 400 status code
              return jsonify({'error': "Please enter your skills and education background."}), 400
 
         recommendations = recommender.get_recommendations(user_skills, user_education, user_location, INTERNSHIPS_FILE)
 
-        # Return the list of recommendations as a JSON response
+        # --- DEBUGGING: Print the recommendations before sending them ---
+        print(f"Found {len(recommendations) if recommendations is not None else 0} recommendations.")
+        print("---------------------\n")
+        
         return jsonify(recommendations)
 
 if __name__ == '__main__':

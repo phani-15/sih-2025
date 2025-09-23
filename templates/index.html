@@ -223,7 +223,7 @@
                         card.querySelector('.matching-percentage').textContent = `${job.matching_percentage}%`;
 
                         const skillsContainer = card.querySelector('.skills-container');
-                        job.required_skills.forEach(skill => {
+                        job.skills.forEach(skill => {
                             const badge = document.importNode(skillBadgeTemplate, true);
                             badge.querySelector('span').textContent = skill;
                             skillsContainer.appendChild(badge);
