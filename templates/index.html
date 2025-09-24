@@ -13,12 +13,17 @@
             to { opacity: 1; transform: scale(1); }
         }
         .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
+        
+        /* Hide the default Google Translate widget */
+        #google_translate_element { display: none !important; }
+        .goog-te-banner-frame { display: none !important; }
+        body { top: 0px !important; }
     </style>
 </head>
 <body class="min-h-screen bg-gray-100">
 
     <!-- Header -->
-    <header class="bg-white shadow flex items-center justify-between px-4 sm:px-6 py-3 flex-wrap gap-2">
+    <header class="bg-white shadow flex items-center justify-between px-4 sm:px-6 py-3 flex-wrap gap-4">
         <div class="flex items-center space-x-2">
             <h2 class="text-xl font-bold">PM Internship</h2>
         </div>
@@ -29,7 +34,21 @@
             <a href="#">Manuals</a>
             <a href="#">Tutorials/Guidance Videos</a>
         </nav>
-        <div class="flex flex-wrap gap-2 justify-center">
+        <div class="flex items-center flex-wrap gap-2 justify-center">
+             <!-- Language Selector Dropdown -->
+            <div class="relative">
+                <select id="language-selector" class="appearance-none bg-gray-100 border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-blue-500 text-sm">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
+                    <option value="te">తెలుగు (Telugu)</option>
+                    <option value="ta">தமிழ் (Tamil)</option>
+                    <option value="bn">বাংলা (Bengali)</option>
+                    <option value="mr">मराठी (Marathi)</option>
+                </select>
+                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+            </div>
             <button class="bg-orange-200 px-3 py-1.5 text-sm sm:px-4 sm:py-2 sm:text-base rounded whitespace-nowrap">Apply Insurance</button>
             <button class="bg-orange-600 text-white px-3 py-1.5 text-sm sm:px-4 sm:py-2 sm:text-base rounded whitespace-nowrap">My Bharat Portal</button>
         </div>
@@ -119,15 +138,61 @@
                     </svg>
                 </button>
             </div>
-            <h1 class="text-xl sm:text-2xl font-extrabold text-gray-800 mb-2 sm:mb-3 mt-4 sm:mt-5 text-center px-4">Matching Job Opportunities</h1>
-            <div id="modalContent" class="p-4 sm:p-6 overflow-y-auto max-h-[75vh] flex justify-center flex-wrap gap-4 sm:gap-6">
-                <!-- Content will be injected by JS -->
+            
+            <!-- Scrollable Content Area -->
+            <div class="p-4 sm:p-6 overflow-y-auto" style="max-height: calc(90vh - 130px);">
+                <h1 class="text-xl sm:text-2xl font-extrabold text-gray-800 mb-2 sm:mb-3 text-center px-4">Matching Job Opportunities</h1>
+                
+                <!-- Container for Recommendation Cards -->
+                <div id="modalContent" class="flex justify-center flex-wrap gap-4 sm:gap-6">
+                    <!-- Content will be injected by JS -->
+                </div>
+
+                <!-- FAQ Section -->
+                <div id="faqSection" class="mt-10 pt-6 border-t-2 border-gray-200">
+                    <h3 class="text-lg font-bold text-center text-gray-800 mb-4">FAQ</h3>
+                    <div class="space-y-4 text-sm text-left max-w-3xl mx-auto">
+                        <div>
+                            <h4 class="font-semibold text-gray-700">What does 'Overall Match' mean?</h4>
+                            <p class="text-gray-600 mt-1">This is a weighted score based on how well your skills (60%) and education (30%) align with the internship's requirements. You get an extra 15% bonus if your preferred location matches.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700">What do the Match Quality ratings mean?</h4>
+                            <p class="text-gray-600 mt-1">These provide a quick summary of your match score. 'Excellent' (80%+) is a very strong fit, 'Good' (60%+) is a solid fit, and 'Fair' (40%+) may be worth considering.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700">What does stipend and no-stipend mean ?</h4>
+                            <p class="text-gray-600 mt-1">Stipend internship → You will receive a fixed payment (could be monthly, weekly, or lump sum) for your work or participation. 
+                            </p>
+                            <p class="text-gray-600 mt-1">No-stipend internship → You will not be paid. You may still gain experience, skills, or a certificate, but there’s no financial support.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700">What is in-person and remote and hybrid interhips?</h4>
+                            <p class="text-gray-600 mt-1">In-person → Work fully at the company’s office
+                            </p>
+                            <p class="text-gray-600 mt-1">Remote → Work fully online from home/anywhere.
+                            </p>
+                            <p class="text-gray-600 mt-1">Hybrid → Combination of office work and remote work.
+                            </p>
+                            
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700">How do I apply for these internships?</h4>
+                            <p class="text-gray-600 mt-1">This tool helps you find matching opportunities. To apply, click the "Apply Now" button which should take you to the official 'My Bharat Portal' or the partner company's website where you can submit your formal application.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- Modal Footer -->
             <div class="px-4 sm:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 text-center">
                 <button id="closeModalBtn2" class="px-4 py-2 text-sm bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700">Close</button>
             </div>
         </div>
     </div>
+    
+    <!-- Hidden div for the actual Google Translate widget -->
+    <div id="google_translate_element"></div>
 
     <!-- Templates for JS -->
     <template id="skillBadgeTemplate">
@@ -146,8 +211,10 @@
             <div class="grid grid-cols-1 gap-2 mb-3 text-[10px] text-gray-700">
                 <div><strong class="text-gray-500">📍 Location:</strong> <span class="location"></span></div>
                 <div><strong class="text-gray-500">🎓 Education:</strong> <span class="education"></span></div>
+                <div><strong class="text-gray-500">🎓 Duration:</strong> <span class="duration"></span></div>
                  <div class="mt-2"><strong class="text-gray-500">🎯 Match:</strong> <span class="font-bold text-blue-600 matching-percentage"></span></div>
             </div>
+            <div class="match-quality-container mb-3"></div>
             <div class="mt-3">
                 <p class="text-gray-500 text-[10px] font-medium mb-2">🔧 Required Skills</p>
                 <div class="flex flex-wrap gap-1 skills-container"></div>
@@ -165,7 +232,53 @@
         </div>
     </template>
 
+    <!-- Google Translate API Script -->
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     <script>
+        // --- START: Language and Form Logic ---
+
+        // This is the official callback function that Google's script runs when it's ready.
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+            
+            setupLanguageSelector();
+        }
+
+        // Attaches the event listener to our custom dropdown.
+        function setupLanguageSelector() {
+            const languageSelector = document.getElementById('language-selector');
+            languageSelector.addEventListener('change', function() {
+                triggerGoogleTranslation(this.value);
+            });
+        }
+        
+        // Programmatically changes the language using the "reset" method.
+        function triggerGoogleTranslation(lang) {
+            const googleTranslateElement = document.getElementById('google_translate_element');
+            const googleTranslateSelect = googleTranslateElement.querySelector('.goog-te-combo');
+
+            if (!googleTranslateSelect) {
+                console.error("The Google Translate dropdown (.goog-te-combo) could not be found.");
+                return;
+            }
+
+            googleTranslateSelect.value = 'en';
+            googleTranslateSelect.dispatchEvent(new Event('change'));
+
+            setTimeout(() => {
+                if (lang !== 'en') {
+                    googleTranslateSelect.value = lang;
+                    googleTranslateSelect.dispatchEvent(new Event('change'));
+                }
+            }, 50);
+        }
+        
+        // Sets up the recommendation form logic.
         document.addEventListener('DOMContentLoaded', () => {
             const internshipForm = document.getElementById('internshipForm');
             const findBtn = document.getElementById('findInternshipsBtn');
@@ -205,6 +318,10 @@
                 } finally {
                     findBtn.textContent = 'Find Internships';
                     findBtn.disabled = false;
+                    const currentLang = document.getElementById('language-selector').value;
+                    if (currentLang !== 'en') {
+                         triggerGoogleTranslation(currentLang);
+                    }
                 }
             });
 
@@ -217,10 +334,31 @@
                         card.querySelector('.job-role').textContent = job.title;
                         card.querySelector('.company').textContent = job.company;
                         card.querySelector('.mode').textContent = job.mode;
-                        card.querySelector('.salary').textContent = job.salary;
+                        card.querySelector('.salary').textContent = job.salary?`stipend is : ${job.salary}`:"no-stipend";
                         card.querySelector('.location').textContent = job.location;
                         card.querySelector('.education').textContent = job.education;
+                        card.querySelector('.duration').textContent = job.duration;
                         card.querySelector('.matching-percentage').textContent = `${job.matching_percentage}%`;
+
+                        let matchQuality = 'Basic Match';
+                        let matchColor = 'bg-gray-200 text-gray-800';
+                        if (job.matching_percentage >= 80) {
+                            matchQuality = 'Excellent Match';
+                            matchColor = 'bg-green-100 text-green-800';
+                        } else if (job.matching_percentage >= 60) {
+                            matchQuality = 'Good Match';
+                            matchColor = 'bg-blue-100 text-blue-800';
+                        } else if (job.matching_percentage >= 40) {
+                            matchQuality = 'Fair Match';
+                            matchColor = 'bg-yellow-100 text-yellow-800';
+                        }
+                        
+                        const matchQualityBadge = document.createElement('span');
+                        matchQualityBadge.className = `px-3 py-1 text-xs font-semibold rounded-full ${matchColor}`;
+                        matchQualityBadge.textContent = matchQuality;
+                        
+                        const badgeContainer = card.querySelector('.match-quality-container');
+                        badgeContainer.appendChild(matchQualityBadge);
 
                         const skillsContainer = card.querySelector('.skills-container');
                         job.skills.forEach(skill => {
@@ -237,6 +375,11 @@
                 }
 
                 modal.classList.remove('hidden');
+                
+                const currentLang = document.getElementById('language-selector').value;
+                if (currentLang !== 'en') {
+                    triggerGoogleTranslation(currentLang);
+                }
             }
 
             // Modal close logic
@@ -247,6 +390,7 @@
                 }
             });
         });
+        // --- END: Language and Form Logic ---
     </script>
 </body>
 </html>
